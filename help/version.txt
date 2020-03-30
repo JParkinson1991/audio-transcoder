@@ -1,0 +1,8 @@
+Command:
+    audio-transcoder version
+
+Description:
+    Shows the package version number
+
+Usage:
+    audio-transcoder version
