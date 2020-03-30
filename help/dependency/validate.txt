@@ -1,0 +1,8 @@
+Command:
+    audio-transcoder dependency:validate
+
+Description:
+    Validates script dependencies
+
+Usage:
+    audio-transcoder dependency:validate

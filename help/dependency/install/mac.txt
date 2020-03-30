@@ -1,0 +1,10 @@
+Command:
+    audio-transcoder dependency:install:mac
+
+Description:
+    Installs the required dependencies to run this application on an Apple MAC.
+    Dependencies are installed via the homebrew package manager.
+    If you would rather not have homebrew on your system it is recommended to install the dependencies manually.
+
+Usage:
+    audio-transcoder dependency:install:mac

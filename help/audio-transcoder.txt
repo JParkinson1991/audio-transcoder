@@ -1,0 +1,20 @@
+
+ _____       _ _        _____                           _
+|  _  |_ _ _| |_|___   |_   _|___ ___ ___ ___ ___ ___ _| |___ ___
+|     | | | . | | . |    | | |  _| .'|   |_ -|  _| . | . | -_|  _|
+|__|__|___|___|_|___|    |_| |_| |__,|_|_|___|___|___|___|___|_|
+
+
+Usage:
+    audio-transcoder <command> [options] [arguments]
+
+Available Commands:
+    dependency:install:mac................... Installs script dependencies for a MAC via homebrew
+    dependency:validate ..................... Validates script dependencies
+    transcode ............................... Transcodes FLAC files
+    spectrogram ............................. Creates spectrograms from audio files.
+    version ................................. Show the package version
+
+Global options:
+    -h | --help ............................. Show the screen for the given context
+    -v | --version .......................... Show the package version

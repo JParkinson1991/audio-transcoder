@@ -1,0 +1,60 @@
+Command:
+    audio-transcoder transcode
+
+Description:
+    Handles transcoding of .flac files to other formats.
+
+    Transcode methods available:
+        FLAC (> 24bit | > 48000) -> FLAC 16bit
+        FLAC -> MP3 320
+        FLAC -> MP3 V0
+        FLAC -> MP3 V2
+
+    This command can either be run on a single FLAC containing directory (for example a single album) or a parent
+    directory whose children are all FLAC containing directories (albums?) (for example a music directory). When
+    recursive mode is enabled only directories that are the first children of the provided <input dir> will be processed
+    these directories will be treat as album directories thus transcode output directories etc generated from them.
+
+    During transcode, only flac files will be recognised within the provided input directory, no other files will be
+    used as a transcode source.
+
+    All other files found within the input directory will be mirrored into the generated output directory except for
+    .cue and .log files. It is assumed that these files exists as part of a CD rip and therefore are not relevant to the
+    transcode outputs. Note if you have mixed directories, mp3's and flac's in the same place the transcoder process
+    will carry these across, it is not the job of this package to manage file organization.
+
+    Spectrograms can be generated for each of the transcoded files as needed.
+
+Usage:
+    audio-transcoder transcode [options] <input dir> <output root>
+
+Arguments:
+    <input dir>
+        The directory in which to start the transcode process from.
+        In the instance of recursive transcode processes, this should be the directory containing all flac containing
+        directories.
+        In the instance of a standard transcode process, this should be the directory to the album/containing
+        directory itself.
+    <output root>
+        The directory in which to save the transcode outputs.
+        IMPORTANT: The transcode process automatically generates directory names in both standard and recursive
+        contexts. The directory provided here will have these directories created within it. No .flac files will be
+        output as a child of this directory. Basically, do not pass the album name as the output root, that directory
+        will be generated for you within what you provide here.
+
+Options:
+    -e|--formats ............................ What formats to transcode to?
+                                              Available formats: FLAC, 320, V0, V2
+                                                  FLAC: Resample down to 16bit
+                                                  320: FLAC -> MP3 320
+                                                  V0: FLAC -> MP3
+                                                  V2: FLAC -> V0
+                                              Formats should be passed as a comma (,) separated string
+                                              Example: FLAC,320,V0,V2
+    -f|--force .............................. Forcefully create transcode directories
+                                              If the generated name for a transcode directory all exists:
+                                                  Not set: Transcode aborts
+                                                  Set: Transcode deletes old directory and saves files in its place
+    -r|--recursive .......................... Enables recursive mode. Details above.
+    -s|--spectrals .......................... Enables generation of spectrals for all transcoded files
+    -y|--non-interactive .................... Disable any confirmation prompts

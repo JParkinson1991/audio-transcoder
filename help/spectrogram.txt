@@ -1,0 +1,18 @@
+Command:
+    audio-transcoder spectrogram
+
+Description:
+    Creates spectrogram images for the provided file
+
+Usage:
+    audio-transcoder spectrogram [options] <input file> <output dir>
+
+Arguments:
+    <input file>
+        The file to create the spectrograms for
+    <output dir>
+        The directory to save the created spectrograms into.
+        Spectrograms will be named after the file they were created from.
+
+Options:
+    -z ...................................... Also create a zommed spectrogram
