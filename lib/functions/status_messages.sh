@@ -5,22 +5,51 @@
 #
 # Usage:
 # error <message>
+# error <label> <message>
 function error() {
-    echo -e "${RED}Error:${RESET} $1"
+    if [[ $# -eq 1 ]]; then
+        message "${RED}" "Error" "$1"
+    elif [[ $# -eq 2 ]]; then
+        message "${RED}" "$1" "$2"
+    else
+        error "Internal Error" "Malformed call to error"
+    fi
 }
 
 # Outputs a standardised success message
 #
 # Usage:
 # success <message>
+# success <label> <message>
 function success() {
-    echo -e "${GREEN}Success:${RESET} $1"
+    if [[ $# -eq 1 ]]; then
+        message "${GREEN}" "Success" "$1"
+    elif [[ $# -eq 2 ]]; then
+        message "${GREEN}" "$1" "$2"
+    else
+        error "Internal Error" "Malformed call to sucess"
+    fi
 }
 
 # Outputs a standardised notice message
 #
 # Usage:
 # notice <message>
+# notice <label> <message>
 function notice() {
-    echo -e "${BLUE}Notice:${RESET} $1"
+    if [[ $# -eq 1 ]]; then
+        message "${BLUE}" "Notice" "$1"
+    elif [[ $# -eq 2 ]]; then
+        message "${BLUE}" "$1" "$2"
+    else
+        error "Internal Error" "Malformed call to notice"
+    fi
+}
+
+# Outputs a formatted message
+#
+# Usage:
+# message <color> <label> <message>
+function message() {
+   echo -e "${1}${2}:${RESET} $3"
 }
