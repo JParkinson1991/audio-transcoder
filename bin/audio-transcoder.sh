@@ -29,7 +29,7 @@ done
 #     audio-transcoder.sh help [command] (Using the help command)
 #     audio-transcoder.sh [command] --help (Using the --help flag)
 #     audio-transcoder.sh [command] -h (Using the -h flag)
-if [ $# == 0 ] || string_contains "$*" --help || string_contains "$*" -h || [[ $1 == "help" ]]; then
+if [[ $# == 0 ]] || string_contains "$*" --help || string_contains "$*" -h || [[ $1 == "help" ]]; then
     # Used format audio-transcoder.sh help [command]
     # Shift arguments along to determine which command help is required for
     if [ $1 == "help" ]; then
