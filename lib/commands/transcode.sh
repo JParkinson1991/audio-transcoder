@@ -70,7 +70,7 @@ fi
 # Interactive mode
 if [[ $INTERACTIVE -eq 0 ]]; then
     echo "---"
-	notice "Process details"
+	notice "Process details" ""
 	echo "Input Directory: $INPUT_DIR"
 	echo "Output Directory: $OUTPUT_DIR"
 	echo "Formats: ${FORMATS[*]}"
@@ -103,7 +103,7 @@ if [[ $RECURSIVE -eq 0 ]]; then
 
     for childDirectory in $(find "$INPUT_DIR" -type d -mindepth 1 -maxdepth 1)
     do
-        notice "Processing Directory: $childDirectory";
+        notice "Processing Directory" "$childDirectory";
 
         # Clean the directory name
         dirNameClean=$(clean_directory_name $(basename "$childDirectory"))
@@ -112,7 +112,7 @@ if [[ $RECURSIVE -eq 0 ]]; then
         for format in ${FORMATS[@]}
         do
             echo "---"
-            notice "Transcoding to: $format"
+            notice "Transcoding to" "$format"
 
             # Determine output directory
             if [[ $format == "FLAC" ]]; then
@@ -133,7 +133,7 @@ else
     for format in ${FORMATS[@]}
     do
         echo "---"
-        notice "Transcoding to: $format"
+        notice "Transcoding to" "$format"
 
          # Determine output directory
         if [[ $format == "FLAC" ]]; then

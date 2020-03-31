@@ -21,7 +21,7 @@ dependency_validate() {
     shift $((OPTIND-1))
 
     if [[ $showOutput -eq 0 ]]; then
-        notice "Validating dependencies"
+        notice "Validating dependencies" ""
     fi
 
     # Validate dependencies
