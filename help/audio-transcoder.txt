@@ -9,6 +9,7 @@ Usage:
     audio-transcoder <command> [options] [arguments]
 
 Available Commands:
+    clean-directory ......................... Outputs a cleaned directory name
     dependency:install:mac................... Installs script dependencies for a MAC via homebrew
     dependency:validate ..................... Validates script dependencies
     transcode ............................... Transcodes FLAC files

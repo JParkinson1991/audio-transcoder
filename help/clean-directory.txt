@@ -1,0 +1,13 @@
+Command:
+    audio-transcoder clean-directory
+
+Description:
+    Cleans a directory outputting it's name minus any audio codec metadata
+
+Usage:
+    audio-transcoder clean-directory <path...>
+
+Arguments:
+    <path>
+        The path or directory name to clean
+        Multiple paths can be passed space separated
