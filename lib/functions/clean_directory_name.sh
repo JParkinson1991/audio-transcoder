@@ -50,7 +50,6 @@ clean_directory_name() {
         s|--*|-|g;
         s|__*|_|g;
         s|_| |g;
-        s|- ||g;
         s|-*$||g;
         s|  *| |g;
         s|&\]|\]|g;
@@ -69,4 +68,7 @@ clean_directory_name() {
         s|{}||g;
         s|[ \t]*$||g;
     ' <<< "$dirName")
+
+    # Removed
+    # s|- ||g;
 }
