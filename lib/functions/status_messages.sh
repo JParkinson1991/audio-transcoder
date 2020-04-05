@@ -16,20 +16,6 @@ function error() {
     fi
 }
 
-# Outputs a standardised success message
-#
-# Usage:
-# success <message>
-# success <label> <message>
-function success() {
-    if [[ $# -eq 1 ]]; then
-        message "${GREEN}" "Success" "$1"
-    elif [[ $# -eq 2 ]]; then
-        message "${GREEN}" "$1" "$2"
-    else
-        error "Internal Error" "Malformed call to sucess"
-    fi
-}
 
 # Outputs a standardised notice message
 #
@@ -43,6 +29,36 @@ function notice() {
         message "${BLUE}" "$1" "$2"
     else
         error "Internal Error" "Malformed call to notice"
+    fi
+}
+
+# Outputs a standardised success message
+#
+# Usage:
+# success <message>
+# success <label> <message>
+function success() {
+    if [[ $# -eq 1 ]]; then
+        message "${GREEN}" "Success" "$1"
+    elif [[ $# -eq 2 ]]; then
+        message "${GREEN}" "$1" "$2"
+    else
+        error "Internal Error" "Malformed call to success"
+    fi
+}
+
+# Outputs a standardised warning message
+#
+# Usage:
+# warning <message>
+# warning <label> <message>
+function warning() {
+    if [[ $# -eq 1 ]]; then
+        message "${YELLOW}" "Warning" "$1"
+    elif [[ $# -eq 2 ]]; then
+        message "${YELLOW}" "$1" "$2"
+    else
+        error "Internal Error" "Malformed call to warninc"
     fi
 }
 
