@@ -25,7 +25,7 @@ dependency_validate() {
     fi
 
     # Validate dependencies
-    for dependency in ${DEPENDENCIES[@]}
+    for dependency in "${DEPENDENCIES[@]}"
     do
         # Ensure command exists
         if ! command_exists "$dependency" ; then
