@@ -71,9 +71,9 @@ transcode_directory() {
                 fi
 
                 # Transcode the file
-                echo "Resampling: $file"
+                notice "Resampling" "$file"
                 sox "$file" -G -b 16 "$outputFilePath" rate -v -L "$newSampleRate" dither
-                echo "Created: $outputFilePath"
+                success "Created" "$outputFilePath"
             else
                 error "Refusing to transcode flac with sample rate <= 16 and sample rate <= 48000"
                 rm -rf "$outputDir"
@@ -97,9 +97,9 @@ transcode_directory() {
             # Update the output file path to be an mp3
             outputFilePath=${outputFilePath/.flac/.mp3}
 
-            echo "Transcoding: $file"
+            notice "Transcoding" "$file"
             sox "$file" -C $compressionFactor "$outputFilePath"
-            echo "Created: $outputFilePath"
+            success "Created" "$outputFilePath"
         fi
 
         if [[ $createSpectrals -eq 0 ]]; then
