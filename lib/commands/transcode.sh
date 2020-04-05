@@ -95,57 +95,74 @@ fi
 
 IFS=$'\n'
 
-# Handle Recursive Processing
+# Build directory array for processing
+# Flat mode: simply use the input dir
+# Recursive mode: Find child directories from input fir
+transcodeDirs=("$INPUT_DIR")
 if [[ $RECURSIVE -eq 0 ]]; then
-    # Grab the parent of the input directory
-    # This will be removed from found files,
-    inputBasePath=$(dirname "$INPUT_DIR")
+    transcodeDirs=$(find "$INPUT_DIR" -type d -mindepth 1 -maxdepth 1)
+fi
 
-    for childDirectory in $(find "$INPUT_DIR" -type d -mindepth 1 -maxdepth 1)
-    do
-        notice "Processing Directory" "$childDirectory";
+# Loop over and transcode files within all required directories
+for transcodeDirectory in "${transcodeDirs[@]}"
+do
+    notice "Processing Directory" "$transcodeDirectory"
 
-        # Clean the directory name
-        dirNameClean=$(clean_directory_name $(basename "$childDirectory"))
-        outputDir="$OUTPUT_DIR/$dirNameClean"
+    # Clean directory name for use as output name
+    transcodeDirectoryNameClean=$(clean_directory_name $(basename "$transcodeDirectory"))
+    outputDirectory="$OUTPUT_DIR/$transcodeDirectoryNameClean"
 
-        for format in ${FORMATS[@]}
+    for format in ${FORMATS[@]}
         do
             echo "---"
             notice "Transcoding to" "$format"
 
-            # Determine output directory
+            # Determine output directory full name
             if [[ $format == "FLAC" ]]; then
-                formatOutputDir="$outputDir [FLAC]"
+                formatOutputDir="$outputDirectory [FLAC]"
             else
-                formatOutputDir="$outputDir [MP3 $format]"
+                formatOutputDir="$outputDirectory [MP3 $format]"
             fi
 
+            # Show the output directory
             echo "Output Directory: $formatOutputDir"
-            transcode_directory "$childDirectory" "$formatOutputDir" "$format" $FORCE $CREATE_SPECTRALS
+
+            # If interactive allow user to change output directory name
+            if [[ $INTERACTIVE -eq 0 ]]; then
+                while true;
+                do
+                    read -n 1 -p "Change output directory name? [y/N] " yn
+                    case $yn in
+                        [Yy]* )
+                            echo ""
+                            while true;
+                            do
+                                read -p "Directory name: " userDirName
+                                if [[ -z $userDirName ]]; then
+                                    echo "No directory name provided, default will be used"
+                                elif [[ -d "$OUTPUT_DIR/$userDirName" && "$FORCE" == "" ]]; then
+                                    echo "Directory exists at: $OUTPUT_DIR/$userDirName"
+                                    echo "Please use a different name"
+                                    continue
+                                else
+                                    formatOutputDir="$OUTPUT_DIR/$userDirName"
+                                fi
+
+                                echo "New Output Directory: $formatOutputDir"
+                                break
+                            done
+                            break;;
+                        [Nn]* )
+                            break;;
+                        * )
+                            break;;
+                    esac
+                done
+            fi
+
+            transcode_directory "$transcodeDirectory" "$formatOutputDir" "$format" $FORCE $CREATE_SPECTRALS
         done
-    done
-# Handle Single Directory Processing
-else
-    dirNameClean=$(clean_directory_name $(basename "$INPUT_DIR"))
-    outputDir="$OUTPUT_DIR/$dirNameClean"
-
-    for format in ${FORMATS[@]}
-    do
-        echo "---"
-        notice "Transcoding to" "$format"
-
-         # Determine output directory
-        if [[ $format == "FLAC" ]]; then
-            formatOutputDir="$outputDir [FLAC]"
-        else
-            formatOutputDir="$outputDir [MP3 $format]"
-        fi
-
-        echo "Output Directory: $formatOutputDir"
-        transcode_directory "$INPUT_DIR" "$formatOutputDir" "$format" $FORCE $CREATE_SPECTRALS
-    done
-fi
+done
 
 echo "---"
 notice "Complete, view previous for errors"

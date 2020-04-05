@@ -37,10 +37,10 @@ create_spectrograms() {
     OUTPUT_FILE=$OUTPUT_DIR/"${inputFileName/.$inputFileExtension/.png}"
 
     sox "$INPUT_FILE" -n spectrogram -o "$OUTPUT_FILE"
-    success "Created spectrogram at: $OUTPUT_FILE"
+    success "Created spectrogram at" "$OUTPUT_FILE"
 
     if [[ $ZOOMED -eq 0 ]]; then
         sox "$INPUT_FILE" -n remix 1 spectrogram -z 120 -w Kaiser -S 0:25 -d 0:04 -o "${OUTPUT_FILE/.png/.zoomed.png}"
-        success "Created zoomed spectrogram at: ${OUTPUT_FILE/.png/.zoomed.png}"
+        success "Created zoomed spectrogram at" "${OUTPUT_FILE/.png/.zoomed.png}"
     fi
 }
