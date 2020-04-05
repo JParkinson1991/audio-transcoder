@@ -36,17 +36,19 @@ if [[ $# == 0 ]] || string_contains "$*" --help || string_contains "$*" -h || [[
         shift 1
     fi
 
-    # Grab the help command arguments
-    helpArgs="$*"
-
     # If command passed as the following:
     #     audio-transcoder.sh help
     #     audio-transcoder.sh -h
     #     audio-transcoder.sh --help
     # Default to empty help arguments, showing the default help screen
-    if [[ $# -eq 0 ]] || [[ $helpArgs == "-h" ]] || [[ $helpArgs == "--help" ]]; then
-        helpArgs=""
+    if [[ $# -eq 0 ]] || [[ "$*" == "-h" ]] || [[ "$*" == "--help" ]]; then
+        show_help
     fi
+
+    # Cleanup help string, extract command portion
+    helpArgs=${*//--help}
+    helpArgs=${helpArgs//-h}
+    helpArgs=$(echo $helpArgs | sed 's|^ *||g; s| *$||g;');
 
     # Command to show helper screen passed, pass to helper method
     show_help "$helpArgs" ":"
