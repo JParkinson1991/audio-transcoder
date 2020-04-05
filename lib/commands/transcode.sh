@@ -10,6 +10,7 @@ CREATE_SPECTRALS=""
 FORCE=""
 FORMATS=(FLAC 320 V0 V2)
 INTERACTIVE=0 #true
+OUTPUT_ROOT="$(pwd)"
 RECURSIVE=1 # false
 
 # Process CLI arguments
@@ -28,6 +29,11 @@ do
 	        FORCE="-f"
 	        shift # past argument
 	        ;;
+        -o|--output-root)
+            OUTPUT_ROOT="$(echo ${2/#\~/$HOME} | sed 's|/*$||')"
+            shift #past argument
+            shift #past value
+            ;;
         -r|--recursive)
             RECURSIVE=0 #true
             shift
@@ -49,30 +55,11 @@ do
 done
 set -- "${positional[@]}" # restore positional parameters
 
-# Store input directory, validate it
-INPUT_DIR="${1/#\~/$HOME}"
-if [[ -z "$INPUT_DIR" ]]; then
-	error "No input directory provided"
-	exit 1
-elif [[ ! -d "$INPUT_DIR" ]]; then
-	error "Failed to find input directory at: $INPUT_DIR"
-	exit 1
-fi
-
-
-# Store output directory, validate it
-OUTPUT_DIR="${2/#\~/$HOME}"
-if [[ -z "$OUTPUT_DIR" ]]; then
-	error "No output directory provided"
-	exit 1
-fi
-
 # Interactive mode
 if [[ $INTERACTIVE -eq 0 ]]; then
     echo "---"
 	notice "Process details" ""
-	echo "Input Directory: $INPUT_DIR"
-	echo "Output Directory: $OUTPUT_DIR"
+	echo "Output Root: $OUTPUT_ROOT"
 	echo "Formats: ${FORMATS[*]}"
 	if [[ $CREATE_SPECTRALS != "" ]]; then
 	    echo "Create Spectrals: Enabled"
@@ -95,24 +82,39 @@ fi
 
 IFS=$'\n'
 
-# Build directory array for processing
-# Flat mode: simply use the input dir
-# Recursive mode: Find child directories from input fir
-transcodeDirs=("$INPUT_DIR")
-if [[ $RECURSIVE -eq 0 ]]; then
-    transcodeDirs=$(find "$INPUT_DIR" -type d -mindepth 1 -maxdepth 1)
-fi
-
-# Loop over and transcode files within all required directories
-for transcodeDirectory in "${transcodeDirs[@]}"
+# Loop and clean arguments
+for inputDir in "$@"
 do
-    notice "Processing Directory" "$transcodeDirectory"
+    # Remove trailing slash from input directory
+    inputDir="$(echo $inputDir | sed 's|/*$||')"
 
-    # Clean directory name for use as output name
-    transcodeDirectoryNameClean=$(clean_directory_name $(basename "$transcodeDirectory"))
-    outputDirectory="$OUTPUT_DIR/$transcodeDirectoryNameClean"
+    # Ensure input directory exists
+    if [[ ! -d "$inputDir" ]]; then
+        waning "Skipping" "Failed to find: $inputDir"
+        continue
+    fi
 
-    for format in ${FORMATS[@]}
+    # Determine transcode directories
+    # Flat mode: Input directory only
+    # Recursive, first child directories of input directory
+    transcodeDirs="$inputDir"
+    if [[ $RECURSIVE -eq 0 ]]; then
+        # Output processing directory notice
+        notice "Recursively Processing" "$inputDir"
+
+        transcodeDirs=$(find "$inputDir" -type d -mindepth 1 -maxdepth 1)
+    fi
+
+    # Loop over and transcode files within all required directories
+    for transcodeDirectory in "${transcodeDirs[@]}"
+    do
+        notice "Processing Directory" "$transcodeDirectory"
+
+        # Clean directory name for use as output name
+        transcodeDirectoryNameClean=$(clean_directory_name $(basename "$transcodeDirectory"))
+        outputDirectory="$OUTPUT_ROOT/$transcodeDirectoryNameClean"
+
+        for format in ${FORMATS[@]}
         do
             echo "---"
             notice "Transcoding to" "$format"
@@ -140,28 +142,34 @@ do
                                 read -p "Directory name: " userDirName
                                 if [[ -z $userDirName ]]; then
                                     echo "No directory name provided, default will be used"
-                                elif [[ -d "$OUTPUT_DIR/$userDirName" && "$FORCE" == "" ]]; then
-                                    echo "Directory exists at: $OUTPUT_DIR/$userDirName"
+                                elif [[ -d "$OUTPUT_ROOT/$userDirName" && "$FORCE" == "" ]]; then
+                                    echo "Directory exists at: $OUTPUT_ROOT/$userDirName"
                                     echo "Please use a different name"
                                     continue
                                 else
-                                    formatOutputDir="$OUTPUT_DIR/$userDirName"
+                                    formatOutputDir="$OUTPUT_ROOT/$userDirName"
                                 fi
 
                                 echo "New Output Directory: $formatOutputDir"
                                 break
                             done
+                            echo ""
                             break;;
                         [Nn]* )
+                            echo ""
                             break;;
                         * )
+                            # Only output newline if enter key pressed
+                            if [[ ! -z $yn ]]; then
+                                echo ""
+                            fi
                             break;;
                     esac
                 done
             fi
-
             transcode_directory "$transcodeDirectory" "$formatOutputDir" "$format" $FORCE $CREATE_SPECTRALS
         done
+    done
 done
 
 echo "---"

@@ -10,13 +10,15 @@ Description:
         FLAC -> MP3 V0
         FLAC -> MP3 V2
 
-    This command can either be run on a single FLAC containing directory (for example a single album) or a parent
-    directory whose children are all FLAC containing directories (albums?) (for example a music directory). When
-    recursive mode is enabled only directories that are the first children of the provided <input dir> will be processed
-    these directories will be treat as album directories thus transcode output directories etc generated from them.
+    Input directories can be treat as a single flac containing directory or the parent directory of multiple flac
+    containing directories. To enable processing as a parent, use the recursive mode. When recursive mode is enabled
+    the first child directories of each input directory will have it's content transcoded as required.
 
-    During transcode, only flac files will be recognised within the provided input directory, no other files will be
+    During transcode, only flac files will be recognised within the provided input directories, no other files will be
     used as a transcode source.
+
+    The transcode process automatically generates directory names to store the transcoded files in both standard and
+    recursive contexts, these directory names can be overridden on a per process basis when not in non interactive mode.
 
     All other files found within the input directory will be mirrored into the generated output directory except for
     .cue and .log files. It is assumed that these files exists as part of a CD rip and therefore are not relevant to the
@@ -26,7 +28,8 @@ Description:
     Spectrograms can be generated for each of the transcoded files as needed.
 
 Usage:
-    audio-transcoder transcode [options] <input dir> <output root>
+    audio-transcoder transcode [options] <input dir>
+    audio-transcoder transcode [options] <input dir> <input dir> ...
 
 Arguments:
     <input dir>
@@ -35,12 +38,6 @@ Arguments:
         directories.
         In the instance of a standard transcode process, this should be the directory to the album/containing
         directory itself.
-    <output root>
-        The directory in which to save the transcode outputs.
-        IMPORTANT: The transcode process automatically generates directory names in both standard and recursive
-        contexts. The directory provided here will have these directories created within it. No .flac files will be
-        output as a child of this directory. Basically, do not pass the album name as the output root, that directory
-        will be generated for you within what you provide here.
 
 Options:
     -e|--formats ............................ What formats to transcode to?
@@ -55,6 +52,9 @@ Options:
                                               If the generated name for a transcode directory all exists:
                                                   Not set: Transcode aborts
                                                   Set: Transcode deletes old directory and saves files in its place
+    -o|--output-root ........................ Set the output directory.
+                                              All generated transcode directories will be saved under this directory.
+                                              If no argument is given, the current working directory will be used.
     -r|--recursive .......................... Enables recursive mode. Details above.
     -s|--spectrals .......................... Enables generation of spectrals for all transcoded files
-    -y|--non-interactive .................... Disable any confirmation prompts
+    -y|--non-interactive .................... Disable any command interactivity

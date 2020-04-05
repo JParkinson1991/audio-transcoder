@@ -14,9 +14,15 @@ confirm() {
     do
         read -n 1 -p "$message [y/N] " yn
         case $yn in
-            [Yy]* ) echo "" && break;;
-            [Nn]* ) exit;;
-            * ) exit;;
+            [Yy]* )
+                echo ""
+                break;;
+            [Nn]* )
+                echo ""
+                exit;;
+            * )
+                echo ""
+                exit;;
         esac
     done
 }
