@@ -35,6 +35,8 @@ transcode_directory() {
         fi
     fi
 
+    IFS=$'\n'
+
     #For every file found in the child directory
     for file in $(find "$inputDir" -type f ! -path '*/\.*' ! -name "*.log" ! -name "*.cue")
     do
