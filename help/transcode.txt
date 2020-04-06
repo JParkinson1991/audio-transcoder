@@ -17,15 +17,18 @@ Description:
     During transcode, only flac files will be recognised within the provided input directories, no other files will be
     used as a transcode source.
 
-    The transcode process automatically generates directory names to store the transcoded files in both standard and
-    recursive contexts, these directory names can be overridden on a per process basis when not in non interactive mode.
+    The transcode process automatically generates directory names to store the transcoded files (one per format) in both
+    standard and recursive contexts, these directory names can be overridden on a per process basis when not in non
+    interactive mode. Directory names are generated using the outputs from the 'clean-directory' command.
 
     All other files found within the input directory will be mirrored into the generated output directory except for
     .cue and .log files. It is assumed that these files exists as part of a CD rip and therefore are not relevant to the
     transcode outputs. Note if you have mixed directories, mp3's and flac's in the same place the transcoder process
-    will carry these across, it is not the job of this package to manage file organization.
+    will carry these across, it is not the job of this application to manage file organization.
 
     Spectrograms can be generated for each of the transcoded files as needed.
+
+    Multiple input directories can be passed to trigger simultaneous with a single command.
 
 Usage:
     audio-transcoder transcode [options] <input dir>

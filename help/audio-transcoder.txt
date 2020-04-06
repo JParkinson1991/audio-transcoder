@@ -12,6 +12,7 @@ Available Commands:
     clean-directory ......................... Outputs a cleaned directory name
     dependency:install:mac................... Installs script dependencies for a MAC via homebrew
     dependency:validate ..................... Validates script dependencies
+    help [command] .......................... View help screen for a command
     transcode ............................... Transcodes FLAC files
     spectrogram ............................. Creates spectrograms from audio files.
     version ................................. Show the package version
