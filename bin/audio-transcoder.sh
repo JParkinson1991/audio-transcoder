@@ -5,7 +5,7 @@
 APP_ROOT="$(cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && cd .. && pwd)"
 
 # Define application dependencies
-DEPENDENCIES=(lame sox);
+DEPENDENCIES=(sox);
 
 # Import all of the required helpers/functions
 #
