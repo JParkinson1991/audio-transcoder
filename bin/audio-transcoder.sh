@@ -33,6 +33,7 @@ if [[ $# == 0 ]] || string_contains "$*" --help || string_contains "$*" -h || [[
     # Used format audio-transcoder.sh help [command]
     # Shift arguments along to determine which command help is required for
     if [ $1 == "help" ]; then
+        helpFirst=0 # set flag for edgecases ie help -h | help --h
         shift 1
     fi
 
@@ -41,8 +42,17 @@ if [[ $# == 0 ]] || string_contains "$*" --help || string_contains "$*" -h || [[
     #     audio-transcoder.sh -h
     #     audio-transcoder.sh --help
     # Default to empty help arguments, showing the default help screen
-    if [[ $# -eq 0 ]] || [[ "$*" == "-h" ]] || [[ "$*" == "--help" ]]; then
+    if [[ $# -eq 0 ]]; then
         show_help
+        exit 0
+    elif [[ "$*" == "-h" ]] || [[ "$*" == "--help" ]]; then
+        # Capture edge case of viewing help -h | help --help
+        if [[ -z $helpFirst ]]; then
+            show_help
+        else
+            show_help "help"
+        fi
+        exit 0
     fi
 
     # Cleanup help string, extract command portion
@@ -51,7 +61,7 @@ if [[ $# == 0 ]] || string_contains "$*" --help || string_contains "$*" -h || [[
     helpArgs=$(echo $helpArgs | sed 's|^ *||g; s| *$||g;');
 
     # Command to show helper screen passed, pass to helper method
-    show_help "$helpArgs" ":"
+    show_help "$helpArgs"
     exit $?
 fi
 
