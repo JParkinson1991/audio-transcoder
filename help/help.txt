@@ -1,0 +1,12 @@
+Command:
+    audio-transcoder help
+
+Description:
+    Shows a help screen
+
+Usage:
+    audio-transcoder help [command]
+
+Arguments:
+    [command]
+        Optional, the command to view the help screen for

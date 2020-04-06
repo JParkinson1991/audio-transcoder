@@ -1,0 +1,24 @@
+Command:
+    audio-transcoder spectrogram
+
+Description:
+    Creates spectrogram images for the provided file
+
+Usage:
+    audio-transcoder spectrogram [options] <input file> [output dir]
+
+Arguments:
+    <input file>
+        The file to create the spectrograms for
+    [output dir]
+        The directory to save the created spectrograms into.
+        Spectrograms will be named after the file they were created from.
+        If not passed current directory will be used
+
+Options:
+    -d|--imgcat-depth ....................... Pass an imgcat --depth argument
+                                              Only consumed when viewing inline spectrograms
+    -i|--inline ............................. Show inline spectrograms, dont save files
+                                              Requires imgcat
+                                              Download https://github.com/eddieantonio/imgcat
+    -z|--zoomed  ............................ Also create a zommed spectrogram
