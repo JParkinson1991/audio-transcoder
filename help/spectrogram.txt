@@ -10,7 +10,7 @@ Usage:
 Arguments:
     <input file>
         The file to create the spectrograms for
-    <output dir>
+    [output dir]
         The directory to save the created spectrograms into.
         Spectrograms will be named after the file they were created from.
         If not passed current directory will be used
