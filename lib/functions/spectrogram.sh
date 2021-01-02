@@ -29,12 +29,12 @@ create_spectrograms() {
 
     # Create output dir as required
     if [[ ! -d "$OUTPUT_DIR" ]]; then
-        mkdir -p $OUTPUT_DIR
+        mkdir -p "$OUTPUT_DIR"
     fi
 
     inputFileName=$(basename "$INPUT_FILE")
     inputFileExtension="${inputFileName##*.}"
-    OUTPUT_FILE=$OUTPUT_DIR/"${inputFileName/.$inputFileExtension/.png}"
+    OUTPUT_FILE="$OUTPUT_DIR/${inputFileName/.$inputFileExtension/.png}"
 
     sox "$INPUT_FILE" -n spectrogram -o "$OUTPUT_FILE"
     success "Created spectrogram at" "$OUTPUT_FILE"
