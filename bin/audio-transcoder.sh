@@ -1,11 +1,23 @@
 #!/usr/bin/env bash
 
-# Store the application root
+# Determine source directory of this script.
+# Required to build import paths etc etc.
+# Ensure symlinks are followed when determining script source path
+# Taken  from: https://stackoverflow.com/questions/59895/how-to-get-the-source-directory-of-a-bash-script-from-within-the-script-itself/246128#246128
+SCRIPT_SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SCRIPT_SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+    SCRIPT_DIR="$( cd -P "$( dirname "$SCRIPT_SOURCE" )" >/dev/null 2>&1 && pwd )"
+    SCRIPT_SOURCE="$(readlink "$SCRIPT_SOURCE")"
+    [[ $SCRIPT_SOURCE != /* ]] && SCRIPT_SOURCE="$SCRIPT_DIR/$SCRIPT_SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+SCRIPT_DIR="$( cd -P "$( dirname "$SCRIPT_SOURCE" )" >/dev/null 2>&1 && pwd )"
+
+# Store APP_ROOT after SCRIPT_DIR resolved
 # Do this prior to imports as they may effect the working directory path
-APP_ROOT="$(cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && cd .. && pwd)"
+APP_ROOT=$(dirname $SCRIPT_DIR)
 
 # Define application dependencies
-DEPENDENCIES=(lame sox);
+DEPENDENCIES=(sox);
 
 # Import all of the required helpers/functions
 #
