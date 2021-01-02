@@ -38,7 +38,7 @@ set -- "${positional[@]}" # restore positional parameters
 if [[ $INLINE -eq 1 ]]; then
     outputDir="$2"
     if [[ -z "$2" ]]; then
-        outputDir=$(pwd)
+        outputDir="$(pwd)"
     fi
 
     create_spectrograms "$1" "$outputDir" $ZOOMED
@@ -54,7 +54,7 @@ if ! command_exists "imgcat" ; then
 fi
 
 # Create temp output dir, to store files
-tmpOutputDir=$(pwd)"/.spectrogramstemp";
+tmpOutputDir="$(pwd)/.spectrogramstemp";
 create_spectrograms "$1" "$tmpOutputDir" $ZOOMED
 if [[ $? -eq 0 ]]; then
     IFS=$'\n'
